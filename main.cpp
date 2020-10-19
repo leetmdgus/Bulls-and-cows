@@ -1,40 +1,34 @@
 #include <iostream>
-#include <random>
+#include <time.h>
 
-void program_hitted();
-void user_hitted();
-void input_programNum();
-void input_useNum();
 
-int user_num;
-int program_num;
+void someone_gues(int &, int &, int &);
+void pro_hitted(int &, int &, int &);
+
+void input_programNum(int &);
+void input_userNum(int &);
+void _rand(int &);
+
 
 int main(){
-    input_programNum();
-    std::cout<<"program_num: "<<program_num<<std::endl;
+    int program_num;
+    int user_num;
+    int _try = 0;
 
-    program_hitted();
+    input_userNum(user_num);
+    pro_hitted(_try, program_num,user_num);
+
+    input_programNum(program_num);
+    someone_gues(_try, program_num, user_num);
+
     return 0;
 }
 
-void input_programNum(){
-    int one, two, three;
-    std::random_device rd;
-
-    // random_device 를 통해 난수 생성 엔진을 초기화 한다.
-    std::mt19937 gen(rd());
-
-    // 0 부터 99 까지 균등하게 나타나는 난수열을 생성하기 위해 균등 분포 정의.
-    while(1){
-        std::uniform_int_distribution<int> dis(100, 999);
-        program_num = dis(gen);
-
-        if( (program_num/100) != (program_num/10)%10 && (program_num/100) != (program_num%10) && (program_num/10)%10 != (program_num%10) )
-            break;
-    }
+void input_programNum(int & program_num){
+    _rand(program_num);
 }
 
-void input_userNum(){
+void input_userNum(int & user_num){
     while(1){
         std::cout<<"your number: ";
         std::cin>>user_num; 
@@ -56,117 +50,108 @@ void input_userNum(){
     }
 }
 
-void program_hitted(){
-    int gues;
-    int ball = 0;
-    int strike = 0;
+void _rand(int & num){ // 100~999까지 숫자가 겹치지 않는 랜덤 넘버 생성.
+    int hund, ten, one;
 
-    int pro_hund;
-    int pro_ten;
-    int pro_one;
-    
-    int user_hund = user_num/100;
-    int user_ten = (user_num/10)%10;
-    int user_one = user_num%10;
+    while(1){
+        srand(time(NULL));
+		num = rand()% 900+100;
+	    
+		hund = num/100;
+    	ten = num/10%10;
+    	one = num%10;
 
-//    while(1){
-        std::random_device rd;
-        // random_device 를 통해 난수 생성 엔진을 초기화 한다.
-        std::mt19937 gen(rd());
-        // 0 부터 99 까지 균등하게 나타나는 난수열을 생성하기 위해 균등 분포 정의.
-        while(1){
-            std::uniform_int_distribution<int> dis(100, 999);
-            program_num = dis(gen);
-            gues = program_num;
-
-            pro_hund = gues/100;
-            pro_ten = (gues/10)%10;
-            pro_one = gues%10;
+        if( hund != ten && hund != one && ten != one ){
+			std::cout<<"program_num: "<<num<<std::endl; 
+			break;
+		}
             
-            if( pro_hund != pro_ten && pro_hund != pro_one && pro_ten != pro_one )
-                std::cout<<"program think: "<< gues << std::endl;
-                break;
-        }
-
-        char pro[3];
-        pro[0] = pro_hund;
-        pro[1] = pro_ten;
-        pro[2] = pro_one;
-
-        for(int i = 0; i<3; i++){
-            if(pro[i]==user_hund || pro[i] == user_ten || pro[i] == user_one){
-                if(i == 0 && pro[i] == user_hund){
-                    strike++;   
-                }
-                else if(i == 1 && pro[i] == user_ten){
-                    strike++;   
-                }
-                else if(i == 2 && pro[i] == user_one){
-                    strike++;   
-                }
-                else{
-                    ball++;
-                }
-            }
-            
-        }
-        std::cout<<strike<<"s "<<ball<<"b"<<std::endl;
-        if(strike == 3){
-            std::cout<<"End. "<<std::endl;
-//            break;
-        }
-//    }
+    }
 }
 
-void user_hitted(){
+void someone_gues(int& _try, int & hitted_num, int & hit_num){
+    int ball, strike;
     int gues;
-    int user_try = 0;
 
-    int ball;
-    int strike;
-    while(1){
-        user_try ++;
-        ball = 0;
-        strike = 0;
+    _try++;
+    ball = 0;
+    strike = 0;
 
-        int pro_hund = program_num/100;
-        int pro_ten = (program_num/10)%10;
-        int pro_one = program_num%10;
+    int hitted_hund = hitted_num/100;
+    int hitted_ten = (hitted_num/10)%10;
+    int hitted_one = hitted_num%10;
 
-        std::cout<<"number: ";
-        std::cin>>gues;
+    std::cout<<"number: ";
+    std::cin>>gues;
+    
+    hit_num =  gues;
 
-        int user_hund = gues/100;
-        int user_ten = (gues/10)%10;
-        int user_one = gues%10;
+    int hit_hund = gues/100;
+    int hit_ten = (gues/10)%10;
+    int hit_one = gues%10;
 
-        char user[3];
-        user[0] = user_hund;
-        user[1] = user_ten;
-        user[2] = user_one;
+    char hit[3];
+    hit[0] = hit_hund;
+    hit[1] = hit_ten;
+    hit[2] = hit_one;
 
-        for(int i = 0; i<3; i++){
-            if(user[i]==pro_hund || user[i] == pro_ten || user[i] == pro_one){
-                if(i == 0 && user[i] == pro_hund){
-                    strike++;   
-                }
-                else if(i == 1 && user[i] == pro_ten){
-                    strike++;   
-                }
-                else if(i == 2 && user[i] == pro_one){
-                    strike++;   
-                }
-                else{
-                    ball++;
-                }
+    for(int i = 0; i<3; i++){
+        if(hit[i]==hitted_hund || hit[i] == hitted_ten || hit[i] == hitted_one){
+            if(i == 0 && hit[i] == hitted_hund){
+                strike++;   
             }
-            
+            else if(i == 1 && hit[i] == hitted_ten){
+                strike++;   
+            }
+            else if(i == 2 && hit[i] == hitted_one){
+                strike++;   
+            }
+            else{
+                ball++;
+            }
         }
-        std::cout<<strike<<"s "<<ball<<"b"<<std::endl;
-        if(strike == 3){
-            std::cout<<"End. You try: "<<user_try<<std::endl;
-            break;
+        
+    }
+    std::cout<<strike<<"s "<<ball<<"b"<<std::endl;
+
+}
+
+
+void pro_hitted(int & _try, int & program_num, int & user_num){
+    int strike = 0, ball = 0;
+    _try ++;
+
+    _rand(program_num); //program_num 에 랜덤숫자 넣음
+    
+    int pro_hund = program_num/100;
+    int pro_ten = program_num/10%10;
+    int pro_one = program_num%10;
+
+    int user_hund = user_num/100;
+    int user_ten = user_num/10%10;
+    int user_one = user_num%10;
+
+    char pro[2];
+
+    pro[0] = pro_hund;
+    pro[1] = pro_ten;
+    pro[2] = pro_one;
+
+    for(int i = 0; i<3; i++){ //// 스트라이크가 하나 더 추가되는 오류 수정해야함.
+        if(pro[i]==user_hund || pro[i] == user_ten || pro[i] == user_one){
+            if(i == 0 && pro[0] == user_hund){
+                strike++;   
+            }
+            else if(i == 1 && pro[1] == user_ten){
+                strike++;   
+            }
+            else if(i == 2 && pro[2] == user_one){
+                strike++;   
+            }
+            else{
+                ball++;
+            }
         }
     }
-    
+    std::cout<<strike<<"s "<<ball<<"b"<<std::endl;
 }
