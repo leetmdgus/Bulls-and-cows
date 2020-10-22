@@ -16,17 +16,21 @@ int i = 2;
 
 
 int main(){
-    int program_num;
-    int user_num;
+    int base_user_num;
+    int base_pro_num;
+
+    int user_hit_program_num;
+    int pro_hit_user_num;
+
     int _try = 0;
     int win = 0;
 
-    input_userNum(user_num);
-    input_programNum(program_num);
+    input_userNum(base_user_num);
+    input_programNum(base_pro_num);
 
     while(win != 1){
-        win = pro_hit(_try, user_num, program_num);
-        win = user_hit(_try, program_num, user_num);
+        win = pro_hit(_try, base_user_num, user_hit_program_num);
+        win = user_hit(_try, base_pro_num, pro_hit_user_num);
     }
     
     return 0;
