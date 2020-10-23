@@ -13,7 +13,8 @@ void _rand(int &);
 int mean_value[3] = {-1,-1,-1};
 int trash_value[10] = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
 int i = 2;
-
+int ball_num =-1;
+int ball2_num = -1;
 
 int main(){
     int base_user_num;
@@ -30,10 +31,18 @@ int main(){
     input_programNum(base_pro_num);
 
     while(pro_win != 1&&user_win!= 1){
+    	user_win = user_hit(_try, base_pro_num, pro_hit_user_num);
         pro_win = pro_hit(_try, base_user_num, user_hit_program_num);
-        user_win = user_hit(_try, base_pro_num, pro_hit_user_num);
     }
-    
+    if(pro_win ==1 && user_win ==1){
+    	std::cout<<"draw"<<std::endl;
+	}
+    if(pro_win == 1){
+    	std::cout<<"program win"<<std::endl;
+	}
+	else{
+		std::cout<<"you win"<<std::endl;
+	}
     return 0;
 }
 
@@ -46,7 +55,7 @@ int pro_hit(int &_try, int &user_num, int & program_num){
     int user_one = user_num%10;
     
     int new_num;
-
+	
     if(trash_value[0] == -1){
         // _rand(program_num);
         while(1){
@@ -117,7 +126,7 @@ int pro_hit(int &_try, int &user_num, int & program_num){
             int ten = num/10%10;
             int one = num%10;
             new_num = num;
-            if(new_num != trash_value[0]&&new_num != trash_value[1]&&new_num != trash_value[2]&&new_num != trash_value[3]&&new_num != trash_value[4]&&new_num != trash_value[5]&&new_num != trash_value[6]&&new_num != trash_value[7]&&new_num != trash_value[8]){
+            if(new_num!=ball_num&&new_num != trash_value[0]&&new_num != trash_value[1]&&new_num != trash_value[2]&&new_num != trash_value[3]&&new_num != trash_value[4]&&new_num != trash_value[5]&&new_num != trash_value[6]&&new_num != trash_value[7]&&new_num != trash_value[8]){
                 std::cout<<new_num<<(int)trash_value[1]<<(int)trash_value[2]<<"    ";
                 break;
             }
@@ -131,21 +140,36 @@ int pro_hit(int &_try, int &user_num, int & program_num){
             if(new_num == user_hund){
                 strike ++;
             }
-            ball ++;
+            else{
+            	ball ++;
+			}
         }
         if(strike == 1){
             std::cout<<strike<<"s "<<ball<<"b"<<std::endl;
             mean_value[0] = new_num;
+            i++;
+            trash_value[i] = new_num;
             return -1;
         }
+        else if(ball ==1){
+        	ball_num = new_num;
+            std::cout<<strike<<"s 1b"<<std::endl;
+            return -1;
+		}
         else{
-            std::cout<<strike<<"s "<<ball<<"b"<<std::endl;
+            std::cout<<strike<<"s 0b"<<std::endl;
             return -1;
         }
     }
 
     else if (mean_value[1]==-1){
         while(1){
+        	if(ball_num !=-1){
+        		std::cout<<(int)mean_value[0]<<ball_num<<trash_value[2]<<"    ";
+        		new_num = ball_num;
+        		ball_num = -1;
+        		break;
+			}
             int num = rand()%9+1;
             // printf("%d\n", num);
             int hund = num/100;
@@ -175,6 +199,9 @@ int pro_hit(int &_try, int &user_num, int & program_num){
         if(strike == 1){
             std::cout<<"2s 0b"<<std::endl;
             mean_value[1] = new_num;
+            i++;
+            trash_value[i] = new_num;
+            
             return -1;
         }
         else{
